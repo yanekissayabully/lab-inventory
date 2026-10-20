@@ -15,12 +15,27 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  width: 100%;
   padding: 10px 14px;
+  border: 0;
   border-bottom: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  background: transparent;
+  text-align: left;
 }
 
-.row:last-child {
+li:last-child .row {
   border-bottom: 0;
+}
+
+.row:hover {
+  background: var(--bg);
+}
+
+.selected,
+.selected:hover {
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
 }
 
 .rowMain {

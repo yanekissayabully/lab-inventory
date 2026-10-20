@@ -9,6 +9,8 @@ interface ItemListProps {
   status: LoadStatus;
   error: string;
   filter: StatusFilter;
+  selectedId: number | null;
+  onSelect: (id: number) => void;
   onReload: () => void;
 }
 
@@ -17,6 +19,8 @@ export default function ItemList({
   status,
   error,
   filter,
+  selectedId,
+  onSelect,
   onReload,
 }: ItemListProps) {
   if (status === "error") {
@@ -24,7 +28,11 @@ export default function ItemList({
       <div className={styles.message} role="alert">
         <p className={styles.messageTitle}>Could not load the list</p>
         <p className={styles.messageText}>{error}</p>
-        <button type="button" className={styles.messageAction} onClick={onReload}>
+        <button
+          type="button"
+          className={styles.messageAction}
+          onClick={onReload}
+        >
           Try again
         </button>
       </div>
@@ -33,7 +41,11 @@ export default function ItemList({
 
   if (status === "loading" && items.length === 0) {
     return (
-      <div className={styles.skeletons} aria-busy="true" aria-label="Loading items">
+      <div
+        className={styles.skeletons}
+        aria-busy="true"
+        aria-label="Loading items"
+      >
         {Array.from({ length: 5 }, (_, i) => (
           <div key={i} className={styles.skeleton} />
         ))}
@@ -62,12 +74,19 @@ export default function ItemList({
       aria-busy={status === "loading"}
     >
       {items.map((item) => (
-        <li key={item.id} className={styles.row}>
-          <div className={styles.rowMain}>
-            <span className={styles.name}>{item.name}</span>
-            <span className={styles.meta}>{item.category}</span>
-          </div>
-          <StatusBadge status={item.status} />
+        <li key={item.id}>
+          <button
+            type="button"
+            className={`${styles.row} ${item.id === selectedId ? styles.selected : ""}`}
+            aria-current={item.id === selectedId}
+            onClick={() => onSelect(item.id)}
+          >
+            <span className={styles.rowMain}>
+              <span className={styles.name}>{item.name}</span>
+              <span className={styles.meta}>{item.category}</span>
+            </span>
+            <StatusBadge status={item.status} />
+          </button>
         </li>
       ))}
     </ul>

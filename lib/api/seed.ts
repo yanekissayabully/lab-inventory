@@ -13,7 +13,8 @@ export const seedItems: ItemDetails[] = [
     purchasedAt: "2023-03-14",
     lastServiceAt: "2025-02-10",
     valueUsd: 399,
-    notes: "Probes are stored in the drawer below. Bandwidth is locked at 50 MHz.",
+    notes:
+      "Probes are stored in the drawer below. Bandwidth is locked at 50 MHz.",
   },
   {
     id: 2,
@@ -27,7 +28,8 @@ export const seedItems: ItemDetails[] = [
     purchasedAt: "2024-01-22",
     lastServiceAt: "2025-06-03",
     valueUsd: 1099,
-    notes: "Nozzle is 0.4 mm. Replace the PEI sheet if first layers stop sticking.",
+    notes:
+      "Nozzle is 0.4 mm. Replace the PEI sheet if first layers stop sticking.",
   },
   {
     id: 3,

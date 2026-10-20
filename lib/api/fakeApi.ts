@@ -89,7 +89,11 @@ function toSummary(item: ItemDetails): ItemSummary {
   return { id, name, description, category, status };
 }
 
-function assertValid(items: ItemDetails[], candidate: Partial<ItemDetails>, id?: number) {
+function assertValid(
+  items: ItemDetails[],
+  candidate: Partial<ItemDetails>,
+  id?: number,
+) {
   if (candidate.name !== undefined && !candidate.name.trim()) {
     throw new Error("Name is required.");
   }
@@ -101,7 +105,9 @@ function assertValid(items: ItemDetails[], candidate: Partial<ItemDetails>, id?:
       (item) => item.id !== id && item.serialNumber === candidate.serialNumber,
     );
     if (taken) {
-      throw new Error(`Serial number ${candidate.serialNumber} is already in use.`);
+      throw new Error(
+        `Serial number ${candidate.serialNumber} is already in use.`,
+      );
     }
   }
 }
@@ -120,7 +126,10 @@ export function getItems(
 }
 
 /** GET /items/:id */
-export function getItem(id: number, signal?: AbortSignal): Promise<ItemDetails> {
+export function getItem(
+  id: number,
+  signal?: AbortSignal,
+): Promise<ItemDetails> {
   return fakeRequest(() => {
     const item = readData().find((item) => item.id === id);
     if (!item) throw new Error("Item not found. It may have been removed.");
@@ -146,7 +155,10 @@ export function createItem(input: ItemInput): Promise<ItemDetails> {
 }
 
 /** PATCH /items/:id */
-export function updateItem(id: number, changes: ItemChanges): Promise<ItemDetails> {
+export function updateItem(
+  id: number,
+  changes: ItemChanges,
+): Promise<ItemDetails> {
   return fakeRequest(() => {
     const items = readData();
     const current = items.find((item) => item.id === id);

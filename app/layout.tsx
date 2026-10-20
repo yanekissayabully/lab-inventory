@@ -4,7 +4,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Lab Inventory",
-  description: "Equipment inventory for a small lab, backed by a simulated async API.",
+  description:
+    "Equipment inventory for a small lab, backed by a simulated async API.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

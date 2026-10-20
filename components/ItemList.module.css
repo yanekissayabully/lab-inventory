@@ -1,0 +1,92 @@
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  transition: opacity 0.15s;
+}
+
+.refreshing {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.rowMain {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.skeletons {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.skeleton {
+  height: 57px;
+  background: #eceef1;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+.message {
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.messageTitle {
+  font-weight: 600;
+}
+
+.messageText {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.messageAction {
+  margin-top: 14px;
+  padding: 6px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.messageAction:hover {
+  background: var(--bg);
+}

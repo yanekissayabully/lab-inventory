@@ -1,3 +1,9 @@
+import Inventory from "@/components/Inventory";
+
 export default function Home() {
-  return <main>Lab Inventory</main>;
+  return (
+    <main>
+      <Inventory />
+    </main>
+  );
 }

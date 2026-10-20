@@ -1,9 +1,69 @@
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --border: #d8dce1;
+  --border-strong: #b9bfc7;
+  --text: #1c2025;
+  --muted: #5d6671;
+  --accent: #1d5fbf;
+  --accent-hover: #174d9c;
+  --accent-soft: #e8f0fb;
+  --success: #17703f;
+  --success-soft: #e5f4ec;
+  --warning: #8a5a00;
+  --warning-soft: #fbf1db;
+  --danger: #b3261e;
+  --danger-soft: #fbeae9;
+  --radius: 6px;
+
+  color-scheme: light;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

@@ -10,6 +10,7 @@ import {
   updateItem,
 } from "@/lib/api/fakeApi";
 import { byName, matchesFilter, toInput, toSummary } from "@/lib/items";
+import { statusChanges, type StatusAction } from "@/lib/status";
 import {
   STATUSES,
   type ItemDetails as ItemDetailsData,
@@ -18,6 +19,7 @@ import {
   type StatusFilter,
 } from "@/lib/types";
 import ItemActions from "./ItemActions";
+import StatusControls from "./StatusControls";
 import ItemDetails, { type DetailsState } from "./ItemDetails";
 import ItemForm, { EMPTY_INPUT } from "./ItemForm";
 import ItemList, { type LoadStatus } from "./ItemList";
@@ -28,7 +30,7 @@ type FormState = { mode: "create" } | { mode: "edit"; id: number };
 
 /** The one mutation currently in flight. `id` is the item it targets. */
 interface Busy {
-  kind: "create" | "save" | "remove";
+  kind: "create" | "save" | "status" | "remove";
   id: number | null;
 }
 
@@ -199,6 +201,28 @@ export default function Inventory() {
     }
   }
 
+  async function handleStatus(action: StatusAction) {
+    if (details.status !== "success" || mutating) return;
+    // Capture the target now. By the time the response arrives the user may
+    // have selected a different item, and `details` in this closure is the
+    // render the click happened in, not the current one.
+    const { id, name } = details.item;
+
+    setBusy({ kind: "status", id });
+    try {
+      const updated = await updateItem(id, statusChanges(action));
+      applyUpdated(updated);
+      setNotice({
+        kind: "success",
+        text: `“${name}” is now ${statusLabel(updated.status).toLowerCase()}.`,
+      });
+    } catch (error) {
+      setNotice({ kind: "error", text: `“${name}”: ${messageOf(error)}` });
+    } finally {
+      setBusy(null);
+    }
+  }
+
   async function handleRemove() {
     if (details.status !== "success" || mutating) return;
     const { id, name } = details.item;
@@ -249,6 +273,17 @@ export default function Inventory() {
     return (
       <>
         <ItemDetails state={shownDetails} onRetry={reloadDetails} />
+        {shownDetails.status === "success" && (
+          <StatusControls
+            key={`${shownDetails.item.id}-${shownDetails.item.status}`}
+            item={shownDetails.item}
+            disabled={mutating}
+            updating={
+              busy?.kind === "status" && busy.id === shownDetails.item.id
+            }
+            onAction={handleStatus}
+          />
+        )}
         {shownDetails.status === "success" && (
           <ItemActions
             key={shownDetails.item.id}

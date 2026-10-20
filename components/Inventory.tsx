@@ -40,6 +40,14 @@ interface Notice {
   text: string;
 }
 
+// On a narrow screen the details panel sits below the list, out of view.
+function scrollToDetailsOnSmallScreens() {
+  if (!window.matchMedia("(max-width: 800px)").matches) return;
+  document
+    .getElementById("details-heading")
+    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function messageOf(error: unknown): string {
   return error instanceof Error ? error.message : "Unknown error";
 }
@@ -141,6 +149,7 @@ export default function Inventory() {
     setSelectedId(id);
     setDetails({ status: "loading" });
     setForm(null);
+    scrollToDetailsOnSmallScreens();
   }
 
   function reloadDetails() {

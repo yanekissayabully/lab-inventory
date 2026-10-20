@@ -45,6 +45,7 @@
 
 .toolbar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
@@ -52,7 +53,7 @@
 }
 
 .panelTitle {
-  flex: 1;
+  flex: 1 1 auto;
   font-size: 16px;
 }
 

@@ -23,6 +23,7 @@ import StatusControls from "./StatusControls";
 import ItemDetails, { type DetailsState } from "./ItemDetails";
 import ItemForm, { EMPTY_INPUT } from "./ItemForm";
 import ItemList, { type LoadStatus } from "./ItemList";
+import Simulator from "./Simulator";
 import { statusLabel } from "./StatusBadge";
 import styles from "./Inventory.module.css";
 
@@ -302,10 +303,13 @@ export default function Inventory() {
   return (
     <div className={styles.shell}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Lab Inventory</h1>
-        <p className={styles.subtitle}>
-          Track who has what, and what is out of service.
-        </p>
+        <div>
+          <h1 className={styles.title}>Lab Inventory</h1>
+          <p className={styles.subtitle}>
+            Track who has what, and what is out of service.
+          </p>
+        </div>
+        <Simulator />
       </header>
 
       {notice && (

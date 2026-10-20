@@ -10,9 +10,7 @@ interface ItemListProps {
   error: string;
   filter: StatusFilter;
   selectedId: number | null;
-  /** Item with a mutation in flight, if any. */
   busyId: number | null;
-  /** Selection is frozen while a form submit is in flight. */
   locked: boolean;
   onSelect: (id: number) => void;
   onReload: () => void;

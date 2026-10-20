@@ -10,7 +10,6 @@ const DELAYS = [
 
 const ERROR_RATES = [0, 0.05, 0.3];
 
-/** Controls for the fake network, so slow and failing requests are easy to try. */
 export default function Simulator() {
   const [delayIndex, setDelayIndex] = useState(() =>
     DELAYS.findIndex((d) => d.minDelay === getApiConfig().minDelay),

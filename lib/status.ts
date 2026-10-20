@@ -13,7 +13,6 @@ function today(): string {
   return `${now.getFullYear()}-${month}-${day}`;
 }
 
-/** The fields an action changes on the server. */
 export function statusChanges(action: StatusAction): ItemChanges {
   switch (action.type) {
     case "check-out":
@@ -23,7 +22,6 @@ export function statusChanges(action: StatusAction): ItemChanges {
     case "send-to-maintenance":
       return { status: "maintenance", assignedTo: null };
     case "finish-maintenance":
-      // Finishing maintenance counts as a service.
       return { status: "available", lastServiceAt: today() };
   }
 }

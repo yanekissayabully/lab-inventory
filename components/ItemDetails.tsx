@@ -16,7 +16,6 @@ const money = new Intl.NumberFormat("en-US", {
 
 function formatDate(iso: string | null): string {
   if (!iso) return "Never";
-  // Parse as a local date; `new Date("2024-01-02")` would be read as UTC.
   const [year, month, day] = iso.split("-").map(Number);
   return new Date(year, month - 1, day).toLocaleDateString("en-US", {
     year: "numeric",

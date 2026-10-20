@@ -29,7 +29,6 @@ import styles from "./Inventory.module.css";
 
 type FormState = { mode: "create" } | { mode: "edit"; id: number };
 
-/** The one mutation currently in flight. `id` is the item it targets. */
 interface Busy {
   kind: "create" | "save" | "status" | "remove";
   id: number | null;
@@ -40,7 +39,6 @@ interface Notice {
   text: string;
 }
 
-// On a narrow screen the details panel sits below the list, out of view.
 function scrollToDetailsOnSmallScreens() {
   if (!window.matchMedia("(max-width: 800px)").matches) return;
   document
@@ -67,8 +65,6 @@ export default function Inventory() {
   const [busy, setBusy] = useState<Busy | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
 
-  // Load the list whenever the filter changes or the user hits Reload.
-  // Both values are read inside the effect, so both are dependencies.
   useEffect(() => {
     const controller = new AbortController();
     let ignore = false;
@@ -85,17 +81,12 @@ export default function Inventory() {
         setListStatus("error");
       });
 
-    // Cleanup runs before the next effect and on unmount: a superseded
-    // request is cancelled and, if it still got through, its result is dropped.
     return () => {
       ignore = true;
       controller.abort();
     };
   }, [filter, reloadKey]);
 
-  // Load the details of the selected item. The effect re-runs when the
-  // selection changes; its cleanup cancels the previous request and flags it
-  // as stale, so a slow response for item A can never overwrite item B.
   useEffect(() => {
     if (selectedId === null) return;
 
@@ -118,8 +109,6 @@ export default function Inventory() {
     };
   }, [selectedId, detailsReloadKey]);
 
-  // Notices dismiss themselves; the cleanup stops a pending timer when a
-  // newer notice replaces this one or the component unmounts.
   useEffect(() => {
     if (!notice) return;
     const timer = setTimeout(() => setNotice(null), 5000);
@@ -130,8 +119,6 @@ export default function Inventory() {
   const shownDetails: DetailsState =
     selectedId === null ? { status: "idle" } : details;
   const mutating = busy !== null;
-  // While a form submit is in flight the selection must not move, otherwise
-  // the response would land on an item the user is no longer looking at.
   const selectionLocked = busy?.kind === "create" || busy?.kind === "save";
 
   function changeFilter(next: StatusFilter) {
@@ -157,7 +144,6 @@ export default function Inventory() {
     setDetailsReloadKey((key) => key + 1);
   }
 
-  /** Mirror a server-confirmed record into the list and the details panel. */
   function applyUpdated(updated: ItemDetailsData) {
     setItems((prev) =>
       prev.map((item) => (item.id === updated.id ? toSummary(updated) : item)),
@@ -173,8 +159,6 @@ export default function Inventory() {
     setBusy({ kind: "create", id: null });
     try {
       const created = await createItem(input);
-      // The filter select is disabled while busy, so `filter` is still the
-      // value the user saw when they submitted.
       if (filter === "all" || filter === created.status) {
         setItems((prev) => [...prev, toSummary(created)].sort(byName));
       } else {
@@ -213,9 +197,6 @@ export default function Inventory() {
 
   async function handleStatus(action: StatusAction) {
     if (details.status !== "success" || mutating) return;
-    // Capture the target now. By the time the response arrives the user may
-    // have selected a different item, and `details` in this closure is the
-    // render the click happened in, not the current one.
     const { id, name } = details.item;
 
     setBusy({ kind: "status", id });

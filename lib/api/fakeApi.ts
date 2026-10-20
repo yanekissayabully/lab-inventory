@@ -9,19 +9,12 @@ import type {
 } from "../types";
 import { toSummary } from "../items";
 
-// ---------------------------------------------------------------------------
-// Storage. This is the only place that touches localStorage; components only
-// ever talk to the exported async functions below.
-// ---------------------------------------------------------------------------
-
 function readData(): ItemDetails[] {
   const raw = localStorage.getItem(DATA_KEY);
   if (raw) {
     try {
       return JSON.parse(raw) as ItemDetails[];
-    } catch {
-      // Corrupted entry: fall through and reseed.
-    }
+    } catch {}
   }
   writeData(seedItems);
   return seedItems;
@@ -30,12 +23,6 @@ function readData(): ItemDetails[] {
 function writeData(items: ItemDetails[]): void {
   localStorage.setItem(DATA_KEY, JSON.stringify(items));
 }
-
-// ---------------------------------------------------------------------------
-// Fake network. Every call waits a random time and may fail. The operation runs
-// when the timer fires, so it sees the data as it is *then*, not when the call
-// was made. Passing an AbortSignal cancels the request before it resolves.
-// ---------------------------------------------------------------------------
 
 function abortError(): DOMException {
   return new DOMException("Request aborted", "AbortError");
@@ -81,10 +68,6 @@ function fakeRequest<T>(operation: () => T, signal?: AbortSignal): Promise<T> {
   });
 }
 
-// ---------------------------------------------------------------------------
-// Endpoints
-// ---------------------------------------------------------------------------
-
 function assertValid(
   items: ItemDetails[],
   candidate: Partial<ItemDetails>,
@@ -108,7 +91,6 @@ function assertValid(
   }
 }
 
-/** GET /items?status= */
 export function getItems(
   status: StatusFilter = "all",
   signal?: AbortSignal,
@@ -121,7 +103,6 @@ export function getItems(
   }, signal);
 }
 
-/** GET /items/:id */
 export function getItem(
   id: number,
   signal?: AbortSignal,
@@ -133,7 +114,6 @@ export function getItem(
   }, signal);
 }
 
-/** POST /items */
 export function createItem(input: ItemInput): Promise<ItemDetails> {
   return fakeRequest(() => {
     const items = readData();
@@ -150,7 +130,6 @@ export function createItem(input: ItemInput): Promise<ItemDetails> {
   });
 }
 
-/** PATCH /items/:id */
 export function updateItem(
   id: number,
   changes: ItemChanges,
@@ -167,7 +146,6 @@ export function updateItem(
   });
 }
 
-/** DELETE /items/:id */
 export function deleteItem(id: number): Promise<{ id: number }> {
   return fakeRequest(() => {
     const items = readData();

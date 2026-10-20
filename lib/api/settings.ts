@@ -1,10 +1,8 @@
-/** localStorage key. Bump the suffix when the stored shape changes. */
 export const DATA_KEY = "lab-inventory-v1";
 
 export interface ApiConfig {
   minDelay: number;
   maxDelay: number;
-  /** Probability (0–1) that a request fails with a simulated server error. */
   errorChance: number;
 }
 

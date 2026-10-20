@@ -44,6 +44,22 @@ li:last-child .row {
   min-width: 0;
 }
 
+.rowSide {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pending {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.row:disabled {
+  opacity: 0.7;
+}
+
 .name {
   font-weight: 600;
   overflow: hidden;

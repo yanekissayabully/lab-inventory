@@ -7,6 +7,7 @@ import type {
   ItemSummary,
   StatusFilter,
 } from "../types";
+import { toSummary } from "../items";
 
 // ---------------------------------------------------------------------------
 // Storage. This is the only place that touches localStorage; components only
@@ -83,11 +84,6 @@ function fakeRequest<T>(operation: () => T, signal?: AbortSignal): Promise<T> {
 // ---------------------------------------------------------------------------
 // Endpoints
 // ---------------------------------------------------------------------------
-
-function toSummary(item: ItemDetails): ItemSummary {
-  const { id, name, description, category, status } = item;
-  return { id, name, description, category, status };
-}
 
 function assertValid(
   items: ItemDetails[],

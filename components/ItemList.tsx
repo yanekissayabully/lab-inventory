@@ -10,6 +10,10 @@ interface ItemListProps {
   error: string;
   filter: StatusFilter;
   selectedId: number | null;
+  /** Item with a mutation in flight, if any. */
+  busyId: number | null;
+  /** Selection is frozen while a form submit is in flight. */
+  locked: boolean;
   onSelect: (id: number) => void;
   onReload: () => void;
 }
@@ -20,6 +24,8 @@ export default function ItemList({
   error,
   filter,
   selectedId,
+  busyId,
+  locked,
   onSelect,
   onReload,
 }: ItemListProps) {
@@ -79,13 +85,19 @@ export default function ItemList({
             type="button"
             className={`${styles.row} ${item.id === selectedId ? styles.selected : ""}`}
             aria-current={item.id === selectedId}
+            disabled={locked}
             onClick={() => onSelect(item.id)}
           >
             <span className={styles.rowMain}>
               <span className={styles.name}>{item.name}</span>
               <span className={styles.meta}>{item.category}</span>
             </span>
-            <StatusBadge status={item.status} />
+            <span className={styles.rowSide}>
+              {item.id === busyId && (
+                <span className={styles.pending}>Working…</span>
+              )}
+              <StatusBadge status={item.status} />
+            </span>
           </button>
         </li>
       ))}
